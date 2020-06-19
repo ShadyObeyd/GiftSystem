@@ -8,6 +8,9 @@ using Microsoft.Extensions.Hosting;
 using GiftSystem.App.Areas.Identity.Data;
 using GiftSystem.Models.DomainModels;
 using GiftSystem.App.Middlewares;
+using GiftSystem.Data.Repositories.Contracts;
+using GiftSystem.Services;
+using GiftSystem.Data.Repositories;
 
 namespace GiftSystem.App
 {
@@ -40,6 +43,12 @@ namespace GiftSystem.App
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            // Application Repositories
+            services.AddScoped<IUsersRepository, UsersRepository>();
+
+            // Application Services
+            services.AddScoped<UsersService>();
         }
 
         

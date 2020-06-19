@@ -1,34 +1,40 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using GiftSystem.App.Models;
+using GiftSystem.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using GiftSystem.App.Models;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace GiftSystem.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UsersService usersService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UsersService usersService)
         {
-            _logger = logger;
+            this.usersService = usersService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            try
+            {
+                string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+                var result = await this.usersService.CreateIndexViewModel(userId);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                if (!result.Success)
+                {
+                    return this.View("Error", new ErrorViewModel(result.Message));
+                }
+
+                return this.View(result.Data);
+            }
+            catch (NullReferenceException)
+            {
+                return this.View();
+            }
         }
     }
 }

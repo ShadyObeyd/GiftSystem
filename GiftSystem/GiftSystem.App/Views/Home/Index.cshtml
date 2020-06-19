@@ -1,8 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model UserIndexViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (this.User.Identity.IsAuthenticated)
+{
+    <p class="text-large"><b>Current Credits: @Model.Credits</b></p>
+    @if (this.User.IsInRole("Admin"))
+    {
+        <h1 class="text-center">Welcome, @this.User.Identity.Name!</h1>
+    }
+    <hr />
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Dashboard</h1>
+            <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+        </div>
+    </div>
+}
+else
+{
+    <h1 class="text-center">Welcome, stranger!</h1>
+    <h3 class="text-center">Please register or login to use our system.</h3>
+}

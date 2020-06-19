@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GiftSystem.Data\GiftSystem.Data.csproj" />
+    <ProjectReference Include="..\GiftSystem.Models\GiftSystem.Models.csproj" />
+  </ItemGroup>
+
+</Project>
