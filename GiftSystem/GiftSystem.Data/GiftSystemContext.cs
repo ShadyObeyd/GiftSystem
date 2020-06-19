@@ -14,6 +14,10 @@ namespace GiftSystem.App.Areas.Identity.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<GiftSystemUser>()
+                    .HasIndex(u => u.PhoneNumber)
+                    .IsUnique();
+
             base.OnModelCreating(builder);
         }
     }
