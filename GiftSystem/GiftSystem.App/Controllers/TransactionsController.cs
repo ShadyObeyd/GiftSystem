@@ -1,5 +1,4 @@
-﻿using GiftSystem.App.Models;
-using GiftSystem.Models.InputModels.Transactions;
+﻿using GiftSystem.Models.InputModels.Transactions;
 using GiftSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,14 +33,9 @@ namespace GiftSystem.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateTransactionInputModel inputModel)
         {
-            var result = await this.usersService.GetUserById(inputModel.ReceiverId);
+            var receiverResult = await this.usersService.GetUserById(inputModel.ReceiverId);
 
-            if (!result.Success)
-            {
-                return this.View("Error", new ErrorViewModel(result.Message));
-            }
-
-            if (result.Data.PhoneNumber != inputModel.RecieverPhoneNumber)
+            if (receiverResult.Data.PhoneNumber != inputModel.RecieverPhoneNumber)
             {
                 string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var model = this.transactionsService.CreateTransactionInputModel(userId);
@@ -51,9 +45,24 @@ namespace GiftSystem.App.Controllers
                 return this.View(model);
             }
 
+            var senderResult = await this.usersService.GetUserById(inputModel.SenderId);
+
+            if (senderResult.Data.Credits < inputModel.Credits)
+            {
+                string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var model = this.transactionsService.CreateTransactionInputModel(userId);
+
+                ModelState.AddModelError("Credits", "You don't have enough credits for this transaction!");
+
+                return this.View(model);
+            }
+
             if (!ModelState.IsValid)
             {
-                return this.View(inputModel);
+                string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var model = this.transactionsService.CreateTransactionInputModel(userId);
+
+                return this.View(model);
             }
 
             await this.transactionsService.CreateTransaction(inputModel.SenderId, inputModel.ReceiverId, inputModel.Wish, inputModel.Credits);
