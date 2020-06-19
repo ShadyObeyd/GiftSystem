@@ -74,3 +74,7 @@ body {
 .text-large {
     font-size: 25px;
 }
+
+textarea {
+    resize: none;
+}
