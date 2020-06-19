@@ -7,13 +7,10 @@
     {
         <h1 class="text-center">Welcome, @this.User.Identity.Name!</h1>
     }
-    <hr />
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-4">Dashboard</h1>
-            <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-        </div>
-    </div>
+    else
+    {
+        <partial name="_UserDashboard" model="Model" />
+    }
 }
 else
 {

@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200619182038_createdTransactionEntity.cs" />
+    <Compile Remove="Migrations\20200619182038_createdTransactionEntity.Designer.cs" />
+    <Compile Remove="Migrations\20200619184236_createdTransactionEntity.cs" />
+    <Compile Remove="Migrations\20200619184236_createdTransactionEntity.Designer.cs" />
+    <Compile Remove="Migrations\20200619184608_createdTransactionEntity.cs" />
+    <Compile Remove="Migrations\20200619184608_createdTransactionEntity.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
   </ItemGroup>
 
