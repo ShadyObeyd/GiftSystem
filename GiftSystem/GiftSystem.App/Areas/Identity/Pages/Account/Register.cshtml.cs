@@ -2,12 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
@@ -74,6 +72,15 @@ namespace GiftSystem.App.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            var users = _userManager.Users.ToArray();
+
+            if (users.Any(u => u.PhoneNumber == Input.PhoneNumber))
+            {
+                ModelState.AddModelError(string.Empty, "Phone number already in use!");
+                return Page();
+            }
+
             if (ModelState.IsValid)
             {
                 var user = new GiftSystemUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = Input.PhoneNumber };
