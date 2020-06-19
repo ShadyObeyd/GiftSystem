@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace GiftSystem.Models.DomainModels
 {
@@ -12,6 +13,7 @@ namespace GiftSystem.Models.DomainModels
             this.Credits = DefaultCreditValue;
         }
 
+        [Range(0, int.MaxValue)]
         public int Credits { get; set; }
     }
 }
