@@ -4,14 +4,16 @@ using GiftSystem.App.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GiftSystem.Data.Migrations
 {
     [DbContext(typeof(GiftSystemContext))]
-    partial class GiftSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20200619203001_addedWishPropertyToTransaction")]
+    partial class addedWishPropertyToTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,26 +95,21 @@ namespace GiftSystem.Data.Migrations
 
             modelBuilder.Entity("GiftSystem.Models.DomainModels.Transaction", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReceiverId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReceiverId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SenderId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Wish")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("SenderId", "ReceiverId");
 
                     b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
 
                     b.ToTable("Transactions");
                 });
@@ -252,11 +249,15 @@ namespace GiftSystem.Data.Migrations
                 {
                     b.HasOne("GiftSystem.Models.DomainModels.GiftSystemUser", "Receiver")
                         .WithMany("ReceivedTransactions")
-                        .HasForeignKey("ReceiverId");
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("GiftSystem.Models.DomainModels.GiftSystemUser", "Sender")
                         .WithMany("SentTransactions")
-                        .HasForeignKey("SenderId");
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

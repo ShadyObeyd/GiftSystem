@@ -1,5 +1,4 @@
-﻿using GiftSystem.Data.Configurations;
-using GiftSystem.Models.DomainModels;
+﻿using GiftSystem.Models.DomainModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +16,19 @@ namespace GiftSystem.App.Areas.Identity.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new TransactionConfiguration());
+            builder.Entity<GiftSystemUser>()
+                   .HasIndex(u => u.PhoneNumber)
+                   .IsUnique();
+
+            builder.Entity<Transaction>()
+                   .HasOne(t => t.Sender)
+                   .WithMany(s => s.SentTransactions)
+                   .HasForeignKey(t => t.SenderId);
+
+            builder.Entity<Transaction>()
+                   .HasOne(t => t.Receiver)
+                   .WithMany(s => s.ReceivedTransactions)
+                   .HasForeignKey(t => t.ReceiverId);
 
             base.OnModelCreating(builder);
         }

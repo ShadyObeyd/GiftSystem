@@ -3,6 +3,16 @@
 @if (this.User.Identity.IsAuthenticated)
 {
     <p class="text-large"><b>Current Credits: @Model.Credits</b></p>
+    @if (Model.Credits > 0)
+    {
+        <a asp-controller="Transactions" asp-action="Create" class="btn btn-secondary btn-lg">Make a gift</a>
+    }
+    else
+    {
+        <h1 class="text-center">You cannot make gifts due to lack of credits!</h1>
+    }
+
+
     @if (this.User.IsInRole("Admin"))
     {
         <h1 class="text-center">Welcome, @this.User.Identity.Name!</h1>

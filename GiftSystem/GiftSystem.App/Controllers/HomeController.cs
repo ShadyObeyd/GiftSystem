@@ -16,6 +16,7 @@ namespace GiftSystem.App.Controllers
             this.usersService = usersService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             try

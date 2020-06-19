@@ -1,0 +1,43 @@
+﻿@model CreateTransactionInputModel
+
+<h1 class="text-center">Create Transaction</h1>
+<form class="mx-auto col-md-6" asp-controller="Transactions" asp-action="Create" method="post">
+    <input asp-for="SenderId" value="@Model.SenderId" hidden />
+    <hr />
+    <div class="form-group">
+        <div class="text-center">
+            <label>Send Gift to:</label>
+        </div>
+        <select asp-for="ReceiverId" class="form-control form-control-sm border border-dark">
+            @foreach (var user in Model.Users)
+            {
+                <option value="@user.Id">@user.Username</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <div class="text-center">
+            <label asp-for="RecieverPhoneNumber"></label>
+        </div>
+        <input asp-for="RecieverPhoneNumber" type="text" class="form-control" placeholder="Phone Number..." />
+        <span asp-validation-for="RecieverPhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="text-center">
+            <label asp-for="Wish"></label>
+        </div>
+        <textarea asp-for="Wish" type="text" class="form-control" placeholder="Wish..."></textarea>
+        <span asp-validation-for="Wish" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div class="text-center">
+            <label asp-for="Credits"></label>
+        </div>
+        <input asp-for="Credits" type="number" class="form-control" placeholder="Credits..." />
+        <span asp-validation-for="Credits" class="text-danger"></span>
+    </div>
+    <hr class="hr-style" />
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-dark">Send Gift</button>
+    </div>
+</form>

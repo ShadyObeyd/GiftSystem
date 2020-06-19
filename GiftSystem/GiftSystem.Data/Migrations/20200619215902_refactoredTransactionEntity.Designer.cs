@@ -4,14 +4,16 @@ using GiftSystem.App.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GiftSystem.Data.Migrations
 {
     [DbContext(typeof(GiftSystemContext))]
-    partial class GiftSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20200619215902_refactoredTransactionEntity")]
+    partial class refactoredTransactionEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

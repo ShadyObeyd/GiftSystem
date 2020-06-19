@@ -77,7 +77,7 @@ namespace GiftSystem.App.Areas.Identity.Pages.Account
 
             if (users.Any(u => u.PhoneNumber == Input.PhoneNumber))
             {
-                ModelState.AddModelError(string.Empty, "Phone number already in use!");
+                ModelState.AddModelError("Input.PhoneNumber", "Phone number already in use!");
                 return Page();
             }
 

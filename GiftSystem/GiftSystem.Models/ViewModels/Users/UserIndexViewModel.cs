@@ -1,5 +1,4 @@
-﻿using System;
-namespace GiftSystem.Models.ViewModels
+﻿namespace GiftSystem.Models.ViewModels.Users
 {
     public class UserIndexViewModel
     {

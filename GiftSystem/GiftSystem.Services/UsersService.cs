@@ -1,7 +1,8 @@
 ﻿using GiftSystem.Data.Repositories.Contracts;
-using GiftSystem.Models.ViewModels;
+using GiftSystem.Models.ViewModels.Users;
 using System.Threading.Tasks;
 using GiftSystem.Services.Results;
+using GiftSystem.Models.DomainModels;
 
 namespace GiftSystem.Services
 {
@@ -37,6 +38,18 @@ namespace GiftSystem.Services
             };
 
             return new ResultData<UserIndexViewModel>(UserWasFoundMessage, true, viewModel);
+        }
+
+        public async Task<ResultData<GiftSystemUser>> GetUserById(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return new ResultData<GiftSystemUser>(UserNotFoundMessage, false, null);
+            }
+
+            var user = await this.usersRepository.GetUserById(userId);
+
+            return new ResultData<GiftSystemUser>(UserWasFoundMessage, true, user);
         }
     }
 }

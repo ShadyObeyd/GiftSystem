@@ -46,9 +46,11 @@ namespace GiftSystem.App
 
             // Application Repositories
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<ITransactionsRepository, TransactionsRepository>();
 
             // Application Services
             services.AddScoped<UsersService>();
+            services.AddScoped<TransactionsService>();
         }
 
         
