@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using GiftSystem.App.Areas.Identity.Data;
 using GiftSystem.Models.DomainModels;
+using GiftSystem.App.Middlewares;
 
 namespace GiftSystem.App
 {
@@ -63,6 +64,8 @@ namespace GiftSystem.App
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.SeedAdmin();
 
             app.UseEndpoints(endpoints =>
             {
