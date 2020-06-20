@@ -3,6 +3,8 @@ using GiftSystem.Models.ViewModels.Users;
 using System.Threading.Tasks;
 using GiftSystem.Services.Results;
 using GiftSystem.Models.DomainModels;
+using System.Linq;
+using GiftSystem.Models.ViewModels.Transactions;
 
 namespace GiftSystem.Services
 {
@@ -24,7 +26,7 @@ namespace GiftSystem.Services
                 return new ResultData<UserIndexViewModel>(UserNotFoundMessage, false, null);
             }
 
-            var user = await this.usersRepository.GetUserById(userId);
+            var user = await this.usersRepository.GetUserWithTransactionsAndUsersById(userId);
 
             if (user == null)
             {
@@ -34,9 +36,22 @@ namespace GiftSystem.Services
             var viewModel = new UserIndexViewModel
             {
                 Credits = user.Credits,
-                Id = user.Id
+                Id = user.Id,
+                SentTransactions = user.SentTransactions.Select(st => new DashboardSentTransactionsViewModel
+                {
+                    Id = st.Id,
+                    ReceiverId = st.ReceiverId,
+                    Credits = st.Credits,
+                    ReceiverUsername = st.Receiver.UserName
+                }),
+                ReceivedTransactions = user.ReceivedTransactions.Select(rt => new DashboardReceivedTransactionsViewModel
+                {
+                    Id = rt.Id,
+                    SenderId = rt.SenderId,
+                    Credits = rt.Credits,
+                    SenderUsername = rt.Sender.UserName,
+                })
             };
-
             return new ResultData<UserIndexViewModel>(UserWasFoundMessage, true, viewModel);
         }
 

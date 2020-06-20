@@ -10,6 +10,8 @@ namespace GiftSystem.Data.Repositories.Contracts
 
         Task<GiftSystemUser> GetUserById(string id);
 
+        Task<GiftSystemUser> GetUserWithTransactionsAndUsersById(string id);
+
         Task UpdateUser(GiftSystemUser user);
     }
 }

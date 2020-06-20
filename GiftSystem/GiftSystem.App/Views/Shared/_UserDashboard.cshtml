@@ -7,9 +7,17 @@
             <div class="row">
                 <div class="col-md-6 text-center">
                     <h5 class="text-center">Sent Transactions</h5>
+                    @foreach (var t in Model.SentTransactions)
+                    {
+                        <p>You sent @t.Credits credits to @t.ReceiverUsername</p>
+                    }
                 </div>
                 <div class="col-md-6 text-center">
                     <h5 class="text-center">Received Transactions</h5>
+                    @foreach (var t in Model.ReceivedTransactions)
+                    {
+                        <p>@t.SenderUsername sent you @t.Credits credits</p>
+                    }
                 </div>
             </div>
         </div>
