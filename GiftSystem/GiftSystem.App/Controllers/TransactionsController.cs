@@ -1,4 +1,5 @@
-﻿using GiftSystem.Models.InputModels.Transactions;
+﻿using GiftSystem.App.Models;
+using GiftSystem.Models.InputModels.Transactions;
 using GiftSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,21 @@ namespace GiftSystem.App.Controllers
 
             await this.transactionsService.CreateTransaction(inputModel.SenderId, inputModel.ReceiverId, inputModel.Wish, inputModel.Credits);
             return this.RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var result = await this.transactionsService.CreateTransactionDetailsViewModel(id, userId);
+
+            if (!result.Success)
+            {
+                return this.View("Error", new ErrorViewModel(result.Message));
+            }
+
+            return this.View(result.Data);
         }
     }
 }

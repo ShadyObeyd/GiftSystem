@@ -75,6 +75,12 @@ namespace GiftSystem.App.Areas.Identity.Pages.Account
 
             var users = _userManager.Users.ToArray();
 
+            if (users.Any(u => u.Email == Input.Email))
+            {
+                ModelState.AddModelError("Input.Email", "Email already in use!");
+                return Page();
+            }
+
             if (users.Any(u => u.PhoneNumber == Input.PhoneNumber))
             {
                 ModelState.AddModelError("Input.PhoneNumber", "Phone number already in use!");

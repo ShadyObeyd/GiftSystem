@@ -9,5 +9,7 @@ namespace GiftSystem.Data.Repositories.Contracts
         Task CreateTransaction(Transaction transaction);
 
         Task<IEnumerable<Transaction>> GetAllTransactionsWithSendersAndReceievers();
+
+        Task<Transaction> GetTransactionWithSenderAndReceiverById(string id);
     }
 }

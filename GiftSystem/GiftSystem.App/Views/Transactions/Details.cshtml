@@ -1,0 +1,22 @@
+﻿@model DetailsTransactionViewModel
+
+<h1 class="text-center">Transaction Details</h1>
+<table class="table">
+    <tbody>
+        <tr>
+            <td>Sender</td>
+            <td>@Model.SenderUsername</td>
+        </tr>
+        <tr>
+            <td>Receiver</td>
+            <td>@Model.ReceiverUsername</td>
+        </tr>
+        <tr>
+            <td>Credits transfered</td>
+            <td>@Model.Credits</td>
+        </tr>
+    </tbody>
+</table>
+<hr />
+<h5>Wish</h5>
+<p>@Model.Wish</p>

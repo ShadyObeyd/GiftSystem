@@ -30,5 +30,14 @@ namespace GiftSystem.Data.Repositories
             await this.db.Transactions.AddAsync(transaction);
             await this.db.SaveChangesAsync();
         }
+
+        public async Task<Transaction> GetTransactionWithSenderAndReceiverById(string id)
+        {
+            var transaction = await this.db.Transactions.Include(t => t.Sender)
+                                                        .Include(t => t.Receiver)
+                                                        .FirstOrDefaultAsync(t => t.Id == id);
+
+            return transaction;
+        }
     }
 }
