@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GiftSystem.App.Controllers
 {
+    [Authorize]
     public class TransactionsController : Controller
     {
         private readonly TransactionsService transactionsService;
@@ -19,18 +20,16 @@ namespace GiftSystem.App.Controllers
             this.usersService = usersService;
         }
 
-        [Authorize]
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var model = this.transactionsService.CreateTransactionInputModel(userId);
+            var model = await this.transactionsService.CreateTransactionInputModel(userId);
 
             return this.View(model);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateTransactionInputModel inputModel)
         {
@@ -39,7 +38,7 @@ namespace GiftSystem.App.Controllers
             if (receiverResult.Data.PhoneNumber != inputModel.RecieverPhoneNumber)
             {
                 string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var model = this.transactionsService.CreateTransactionInputModel(userId);
+                var model = await this.transactionsService.CreateTransactionInputModel(userId);
 
                 ModelState.AddModelError("RecieverPhoneNumber", "Incorrect receiver phone number!");
                 
@@ -51,7 +50,7 @@ namespace GiftSystem.App.Controllers
             if (senderResult.Data.Credits < inputModel.Credits)
             {
                 string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var model = this.transactionsService.CreateTransactionInputModel(userId);
+                var model = await this.transactionsService.CreateTransactionInputModel(userId);
 
                 ModelState.AddModelError("Credits", "You don't have enough credits for this transaction!");
 
@@ -61,7 +60,7 @@ namespace GiftSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var model = this.transactionsService.CreateTransactionInputModel(userId);
+                var model = await this.transactionsService.CreateTransactionInputModel(userId);
 
                 return this.View(model);
             }
@@ -70,7 +69,6 @@ namespace GiftSystem.App.Controllers
             return this.RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {

@@ -1,10 +1,8 @@
 ﻿using GiftSystem.App.Areas.Identity.Data;
 using GiftSystem.Data.Repositories.Contracts;
 using GiftSystem.Models.DomainModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiftSystem.Data.Repositories
@@ -18,9 +16,18 @@ namespace GiftSystem.Data.Repositories
             this.db = db;
         }
 
-        public IEnumerable<GiftSystemUser> GetAllUsers()
+        public async Task<IEnumerable<GiftSystemUser>> GetAllUsers()
         {
-            var users = this.db.Users.ToArray();
+            var users = await this.db.Users.ToArrayAsync();
+
+            return users;
+        }
+
+        public async Task<IEnumerable<GiftSystemUser>> GetAllUsersWithTransactions()
+        {
+            var users = await this.db.Users.Include(u => u.SentTransactions)
+                                           .Include(u => u.ReceivedTransactions)
+                                           .ToArrayAsync();
 
             return users;
         }

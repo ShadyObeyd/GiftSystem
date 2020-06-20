@@ -27,14 +27,14 @@ namespace GiftSystem.Services
             this.usersRepository = usersRepository;
         }
 
-        public CreateTransactionInputModel CreateTransactionInputModel(string userId)
+        public async Task<CreateTransactionInputModel> CreateTransactionInputModel(string userId)
         {
-            var users = this.usersRepository.GetAllUsers().Where(u => u.Id != userId);
-
+            var users = await this.usersRepository.GetAllUsers();
+            
             var model = new CreateTransactionInputModel
             {
                 SenderId = userId,
-                Users = users.Select(u => new CreateTransactionUserInputModel
+                Users = users.Where(u => u.Id != userId).Select(u => new CreateTransactionUserInputModel
                 {
                     Id = u.Id,
                     Username = u.Email

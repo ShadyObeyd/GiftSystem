@@ -12,6 +12,7 @@ namespace GiftSystem.Services
     {
         private const string UserNotFoundMessage = "User not found!";
         private const string UserWasFoundMessage = "User found!";
+        private const string AllUsersViewModelCreatedMessage = "All users view model created.";
 
         private readonly IUsersRepository usersRepository;
         private readonly ITransactionsRepository transactionsRepository;
@@ -57,8 +58,8 @@ namespace GiftSystem.Services
                 AllTransactions = transactions.Select(t => new AllTransactionsViewModel
                 {
                     Id = t.Id,
-                    SenderUsername = t.Sender.UserName,
-                    ReceiverUsername = t.Receiver.UserName,
+                    SenderUsername = t.Sender.Id == userId ? "You" : t.Sender.UserName,
+                    ReceiverUsername = t.Receiver.Id == userId ? "you" : t.Receiver.UserName,
                     Credits = t.Credits
                 })
             };
@@ -75,6 +76,24 @@ namespace GiftSystem.Services
             var user = await this.usersRepository.GetUserById(userId);
 
             return new ResultData<GiftSystemUser>(UserWasFoundMessage, true, user);
+        }
+
+        public async Task<ResultData<AllUsersViewModel>> CreateAllUsersViewModel()
+        {
+            var users = await this.usersRepository.GetAllUsersWithTransactions();
+
+            var viewModel = new AllUsersViewModel
+            {
+                Users = users.Select(u => new AllUsersUserViewModel
+                {
+                    Username = u.UserName,
+                    Credits = u.Credits,
+                    SentTransactionsCount = u.SentTransactions.Count(),
+                    ReceivedTransactionsCount = u.ReceivedTransactions.Count()
+                })
+            };
+
+            return new ResultData<AllUsersViewModel>(AllUsersViewModelCreatedMessage, true, viewModel);
         }
     }
 }
