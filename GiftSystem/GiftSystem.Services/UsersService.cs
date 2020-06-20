@@ -12,11 +12,14 @@ namespace GiftSystem.Services
     {
         private const string UserNotFoundMessage = "User not found!";
         private const string UserWasFoundMessage = "User found!";
-        private readonly IUsersRepository usersRepository;
 
-        public UsersService(IUsersRepository usersRepository)
+        private readonly IUsersRepository usersRepository;
+        private readonly ITransactionsRepository transactionsRepository;
+
+        public UsersService(IUsersRepository usersRepository, ITransactionsRepository transactionsRepository)
         {
             this.usersRepository = usersRepository;
+            this.transactionsRepository = transactionsRepository;
         }
 
         public async Task<ResultData<UserIndexViewModel>> CreateIndexViewModel(string userId)
@@ -33,6 +36,8 @@ namespace GiftSystem.Services
                 return new ResultData<UserIndexViewModel>(UserNotFoundMessage, false, null);
             }
 
+            var transactions = await this.transactionsRepository.GetAllTransactionsWithSendersAndReceievers();
+
             var viewModel = new UserIndexViewModel
             {
                 Credits = user.Credits,
@@ -40,16 +45,21 @@ namespace GiftSystem.Services
                 SentTransactions = user.SentTransactions.Select(st => new DashboardSentTransactionsViewModel
                 {
                     Id = st.Id,
-                    ReceiverId = st.ReceiverId,
                     Credits = st.Credits,
                     ReceiverUsername = st.Receiver.UserName
                 }),
                 ReceivedTransactions = user.ReceivedTransactions.Select(rt => new DashboardReceivedTransactionsViewModel
                 {
                     Id = rt.Id,
-                    SenderId = rt.SenderId,
                     Credits = rt.Credits,
                     SenderUsername = rt.Sender.UserName,
+                }),
+                AllTransactions = transactions.Select(t => new AllTransactionsViewModel
+                {
+                    Id = t.Id,
+                    SenderUsername = t.Sender.UserName,
+                    ReceiverUsername = t.Receiver.UserName,
+                    Credits = t.Credits
                 })
             };
             return new ResultData<UserIndexViewModel>(UserWasFoundMessage, true, viewModel);

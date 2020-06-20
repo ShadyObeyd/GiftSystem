@@ -1,0 +1,15 @@
+﻿@model UserIndexViewModel
+
+<div class="jumbotron jumbotron-fluid">
+    <h1 class="text-center">Dashboard</h1>
+    <hr />
+    <div class="container">
+        <h5 class="text-center">All Transactions</h5>
+        @foreach (var t in Model.AllTransactions)
+        {
+            <div class="row justify-content-center link-as-text">
+                <a asp-controller="Transactions" , asp-action="Details" asp-route-id="@t.Id">@t.SenderUsername sent @t.Credits credits to @t.ReceiverUsername</a>
+            </div>
+        }
+    </div>
+</div>

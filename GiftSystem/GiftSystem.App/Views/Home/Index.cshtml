@@ -16,6 +16,7 @@
     @if (this.User.IsInRole("Admin"))
     {
         <h1 class="text-center">Welcome, @this.User.Identity.Name!</h1>
+        <partial name="_AdminDashboard" model="Model" />
     }
     else
     {

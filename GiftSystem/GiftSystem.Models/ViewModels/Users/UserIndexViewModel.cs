@@ -12,5 +12,7 @@ namespace GiftSystem.Models.ViewModels.Users
         public IEnumerable<DashboardSentTransactionsViewModel> SentTransactions { get; set; }
 
         public IEnumerable<DashboardReceivedTransactionsViewModel> ReceivedTransactions { get; set; }
+
+        public IEnumerable<AllTransactionsViewModel> AllTransactions { get; set; }
     }
 }
