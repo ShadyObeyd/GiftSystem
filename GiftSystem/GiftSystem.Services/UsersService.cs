@@ -148,10 +148,22 @@ namespace GiftSystem.Services
             {
                 return new Result(RegisterFailedMessage, false);
             }
-
+            await this.usersRepository.AsignUserToRole(user);
             await this.usersRepository.SignInUser(user);
 
             return new Result(RegisteredSuccessfullyMessage, true);
+        }
+
+        public async Task<Result> LoginUser(string email, string password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                return new Result(UserNotFoundMessage, false);
+            }
+
+            await this.usersRepository.LoginUser(email, password);
+
+            return new Result(UserWasFoundMessage, true);
         }
     }
 }

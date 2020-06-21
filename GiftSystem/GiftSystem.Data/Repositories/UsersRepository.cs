@@ -79,5 +79,10 @@ namespace GiftSystem.Data.Repositories
         {
             await this.signInManager.SignOutAsync();
         }
+
+        public async Task AsignUserToRole(GiftSystemUser user)
+        {
+            await this.signInManager.UserManager.AddToRoleAsync(user, "User");
+        }
     }
 }

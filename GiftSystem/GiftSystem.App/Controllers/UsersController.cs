@@ -64,6 +64,40 @@ namespace GiftSystem.App.Controllers
             return this.RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginInputModel inputModel)
+        {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
+
+            var result = await this.usersService.LoginUser(inputModel.Email, inputModel.Password);
+
+            if (!result.Success)
+            {
+                return this.View("Error", new ErrorViewModel(result.Message));
+            }
+
+            return this.RedirectToAction("Index", "Home");
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Logout()

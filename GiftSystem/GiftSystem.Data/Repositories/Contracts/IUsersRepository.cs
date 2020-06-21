@@ -21,6 +21,8 @@ namespace GiftSystem.Data.Repositories.Contracts
 
         Task SignInUser(GiftSystemUser user);
 
+        Task AsignUserToRole(GiftSystemUser user);
+
         Task LoginUser(string email, string passowrd);
 
         Task LogoutUser();
