@@ -11,6 +11,7 @@ using GiftSystem.App.Middlewares;
 using GiftSystem.Data.Repositories.Contracts;
 using GiftSystem.Services;
 using GiftSystem.Data.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GiftSystem.App
 {
@@ -41,8 +42,10 @@ namespace GiftSystem.App
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<GiftSystemContext>();
 
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+            services.AddControllersWithViews(o =>
+            {
+                o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             // Application Repositories
             services.AddScoped<IUsersRepository, UsersRepository>();
@@ -83,7 +86,6 @@ namespace GiftSystem.App
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
             });
         }
     }
