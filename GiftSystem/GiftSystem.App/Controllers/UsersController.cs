@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GiftSystem.App.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UsersService usersService;
@@ -17,6 +16,7 @@ namespace GiftSystem.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> All()
         {
             var result = await this.usersService.CreateAllUsersViewModel();
@@ -27,6 +27,26 @@ namespace GiftSystem.App.Controllers
             }
 
             return this.View(result.Data);
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return this.View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            var result = await this.usersService.LogoutUser();
+
+            if (!result.Success)
+            {
+                return this.View("Error", new ErrorViewModel(result.Message));
+            }
+
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }

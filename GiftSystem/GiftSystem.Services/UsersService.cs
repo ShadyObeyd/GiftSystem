@@ -13,6 +13,7 @@ namespace GiftSystem.Services
         private const string UserNotFoundMessage = "User not found!";
         private const string UserWasFoundMessage = "User found!";
         private const string AllUsersViewModelCreatedMessage = "All users view model created.";
+        private const string UserLoggedOutMessage = "User was logged out.";
 
         private readonly IUsersRepository usersRepository;
         private readonly ITransactionsRepository transactionsRepository;
@@ -94,6 +95,13 @@ namespace GiftSystem.Services
             };
 
             return new ResultData<AllUsersViewModel>(AllUsersViewModelCreatedMessage, true, viewModel);
+        }
+
+        public async Task<Result> LogoutUser()
+        {
+            await this.usersRepository.LogoutUser();
+
+            return new Result(UserLoggedOutMessage, true);
         }
     }
 }

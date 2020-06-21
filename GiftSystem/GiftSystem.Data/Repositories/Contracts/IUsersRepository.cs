@@ -15,5 +15,11 @@ namespace GiftSystem.Data.Repositories.Contracts
         Task UpdateUser(GiftSystemUser user);
 
         Task<IEnumerable<GiftSystemUser>> GetAllUsersWithTransactions();
+
+        Task<GiftSystemUser> CreateAndSignInUser(GiftSystemUser user);
+
+        Task<GiftSystemUser> LoginUser(string email, string passowrd);
+
+        Task LogoutUser();
     }
 }
