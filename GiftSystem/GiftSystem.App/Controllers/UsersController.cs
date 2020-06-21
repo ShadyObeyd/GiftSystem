@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GiftSystem.App.Models;
+using GiftSystem.Models.InputModels.Users;
 using GiftSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,35 @@ namespace GiftSystem.App.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
             return this.View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterInputModel inputModel)
+        {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
+
+            var result = await this.usersService.RegisterUser(inputModel.Email, inputModel.Password, inputModel.ConfirmPassword, inputModel.PhoneNumber);
+
+            if (!result.Success)
+            {
+                return this.View("Error", new ErrorViewModel(result.Message));
+            }
+
+            return this.RedirectToAction("Index", "Home");
         }
 
         [Authorize]

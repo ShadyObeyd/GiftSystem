@@ -1,4 +1,5 @@
 ﻿using GiftSystem.Models.DomainModels;
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,9 +17,11 @@ namespace GiftSystem.Data.Repositories.Contracts
 
         Task<IEnumerable<GiftSystemUser>> GetAllUsersWithTransactions();
 
-        Task<GiftSystemUser> CreateAndSignInUser(GiftSystemUser user);
+        Task<IdentityResult> CreateUser(GiftSystemUser user, string passowrd);
 
-        Task<GiftSystemUser> LoginUser(string email, string passowrd);
+        Task SignInUser(GiftSystemUser user);
+
+        Task LoginUser(string email, string passowrd);
 
         Task LogoutUser();
     }

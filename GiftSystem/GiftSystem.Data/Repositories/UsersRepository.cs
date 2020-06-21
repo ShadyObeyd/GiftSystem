@@ -58,14 +58,21 @@ namespace GiftSystem.Data.Repositories
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<GiftSystemUser> CreateAndSignInUser(GiftSystemUser user)
+        public async Task<IdentityResult> CreateUser(GiftSystemUser user, string password)
         {
-            throw new System.NotImplementedException();
+            var result = await this.signInManager.UserManager.CreateAsync(user, password);
+
+            return result;
         }
 
-        public async Task<GiftSystemUser> LoginUser(string email, string passowrd)
+        public async Task SignInUser(GiftSystemUser user)
         {
-            throw new System.NotImplementedException();
+            await this.signInManager.SignInAsync(user, isPersistent: true);
+        }
+
+        public async Task LoginUser(string email, string passowrd)
+        {
+            await this.signInManager.PasswordSignInAsync(email, passowrd, isPersistent: true, lockoutOnFailure: false);
         }
 
         public async Task LogoutUser()

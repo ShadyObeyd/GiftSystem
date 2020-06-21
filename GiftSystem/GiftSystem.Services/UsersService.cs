@@ -14,6 +14,10 @@ namespace GiftSystem.Services
         private const string UserWasFoundMessage = "User found!";
         private const string AllUsersViewModelCreatedMessage = "All users view model created.";
         private const string UserLoggedOutMessage = "User was logged out.";
+        private const string FieldIsRequiredMessage = "{0} is required!";
+        private const string PassowrdsDoNotMatchMessage = "Passwords do not match!";
+        private const string RegisterFailedMessage = "Register failed!";
+        private const string RegisteredSuccessfullyMessage = "User reigsered.";
 
         private readonly IUsersRepository usersRepository;
         private readonly ITransactionsRepository transactionsRepository;
@@ -102,6 +106,52 @@ namespace GiftSystem.Services
             await this.usersRepository.LogoutUser();
 
             return new Result(UserLoggedOutMessage, true);
+        }
+
+        public async Task<Result> RegisterUser(string email, string password, string rePassword, string phoneNumber)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return new Result(string.Format(FieldIsRequiredMessage, email), false);
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                return new Result(string.Format(FieldIsRequiredMessage, password), false);
+            }
+
+            if (string.IsNullOrEmpty(rePassword))
+            {
+                return new Result(string.Format(FieldIsRequiredMessage, rePassword), false);
+            }
+
+            if (password != rePassword)
+            {
+                return new Result(PassowrdsDoNotMatchMessage, false);
+            }
+
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return new Result(string.Format(FieldIsRequiredMessage, phoneNumber), false);
+            }
+
+            var user = new GiftSystemUser
+            {
+                UserName = email,
+                Email = email,
+                PhoneNumber = phoneNumber
+            };
+
+            var result = await this.usersRepository.CreateUser(user, password);
+
+            if (!result.Succeeded)
+            {
+                return new Result(RegisterFailedMessage, false);
+            }
+
+            await this.usersRepository.SignInUser(user);
+
+            return new Result(RegisteredSuccessfullyMessage, true);
         }
     }
 }
