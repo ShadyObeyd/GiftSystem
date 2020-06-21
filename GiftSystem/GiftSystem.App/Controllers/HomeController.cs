@@ -24,7 +24,7 @@ namespace GiftSystem.App.Controllers
                 string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
                 var result = await this.usersService.CreateIndexViewModel(userId);
-                ;
+
                 if (!result.Success)
                 {
                     return this.View("Error", new ErrorViewModel(result.Message));
